@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function App() {
+const CreateCustomerPersonaForm = () => {
   const [formData, setFormData] = useState({
     personaName: '',
     jobRole: '',
@@ -15,9 +15,10 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('/.netlify/functions/airtable-proxy', {
+      const response = await axios.post('/.netlify/functions/airtable-proxy', {
         fields: formData
       });
+      console.log('Success:', response.data);
       alert('Form submitted successfully!');
       setFormData({ personaName: '', jobRole: '', companyProfiles: '' });
     } catch (error) {
@@ -27,45 +28,31 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>Create Ideal Customer Persona</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="personaName">Persona Name</label>
-          <input
-            type="text"
-            id="personaName"
-            name="personaName"
-            value={formData.personaName}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="jobRole">Job Role</label>
-          <input
-            type="text"
-            id="jobRole"
-            name="jobRole"
-            value={formData.jobRole}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="companyProfiles">Company Profiles</label>
-          <textarea
-            id="companyProfiles"
-            name="companyProfiles"
-            value={formData.companyProfiles}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit}>
+      <input
+        name="personaName"
+        value={formData.personaName}
+        onChange={handleChange}
+        placeholder="Persona Name"
+        required
+      />
+      <input
+        name="jobRole"
+        value={formData.jobRole}
+        onChange={handleChange}
+        placeholder="Job Role"
+        required
+      />
+      <textarea
+        name="companyProfiles"
+        value={formData.companyProfiles}
+        onChange={handleChange}
+        placeholder="Company Profiles (comma-separated)"
+        required
+      />
+      <button type="submit">Submit</button>
+    </form>
   );
-}
+};
 
-export default App;
+export default CreateCustomerPersonaForm;

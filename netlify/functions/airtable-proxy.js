@@ -9,7 +9,22 @@ exports.handler = async function(event, context) {
   const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${AIRTABLE_TABLE_NAME}`;
 
   try {
-    const response = await axios.post(url, JSON.parse(event.body), {
+    const { fields } = JSON.parse(event.body);
+    
+    // Convert the companyProfiles string to an array if it's not already
+    if (typeof fields.companyProfiles === 'string') {
+      fields.companyProfiles = fields.companyProfiles.split(',').map(item => item.trim());
+    }
+
+    const airtableData = {
+      records: [
+        {
+          fields: fields
+        }
+      ]
+    };
+
+    const response = await axios.post(url, airtableData, {
       headers: {
         'Authorization': `Bearer ${AIRTABLE_API_KEY}`,
         'Content-Type': 'application/json'
@@ -21,9 +36,10 @@ exports.handler = async function(event, context) {
       body: JSON.stringify(response.data)
     };
   } catch (error) {
+    console.error('Error:', error);
     return {
-      statusCode: error.response ? error.response.status : 500,
-      body: JSON.stringify({ error: error.message })
+      statusCode: 422,
+      body: JSON.stringify({ error: 'Unable to process request', details: error.message })
     };
   }
 };
