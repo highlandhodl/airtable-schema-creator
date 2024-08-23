@@ -13,6 +13,7 @@ const CreateCustomerPersonaForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('Submitting form data:', formData);
     try {
       const response = await axios.post('/.netlify/functions/airtable-proxy', {
         fields: formData
@@ -21,7 +22,7 @@ const CreateCustomerPersonaForm = () => {
       alert('Form submitted successfully!');
       setFormData({ personaName: '', jobRole: '' });
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('Error submitting form:', error.response ? error.response.data : error.message);
       alert('An error occurred while submitting the form.');
     }
   };
