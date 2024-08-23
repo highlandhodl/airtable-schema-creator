@@ -11,15 +11,13 @@ exports.handler = async function(event, context) {
   try {
     const { fields } = JSON.parse(event.body);
     
-    // Convert the companyProfiles string to an array if it's not already
-    if (typeof fields.companyProfiles === 'string') {
-      fields.companyProfiles = fields.companyProfiles.split(',').map(item => item.trim());
-    }
-
     const airtableData = {
       records: [
         {
-          fields: fields
+          fields: {
+            personaName: fields.personaName,
+            jobRole: fields.jobRole
+          }
         }
       ]
     };

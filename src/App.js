@@ -4,8 +4,7 @@ import axios from 'axios';
 const CreateCustomerPersonaForm = () => {
   const [formData, setFormData] = useState({
     personaName: '',
-    jobRole: '',
-    companyProfiles: ''
+    jobRole: ''
   });
 
   const handleChange = (e) => {
@@ -20,7 +19,7 @@ const CreateCustomerPersonaForm = () => {
       });
       console.log('Success:', response.data);
       alert('Form submitted successfully!');
-      setFormData({ personaName: '', jobRole: '', companyProfiles: '' });
+      setFormData({ personaName: '', jobRole: '' });
     } catch (error) {
       console.error('Error submitting form:', error);
       alert('An error occurred while submitting the form.');
@@ -41,13 +40,6 @@ const CreateCustomerPersonaForm = () => {
         value={formData.jobRole}
         onChange={handleChange}
         placeholder="Job Role"
-        required
-      />
-      <textarea
-        name="companyProfiles"
-        value={formData.companyProfiles}
-        onChange={handleChange}
-        placeholder="Company Profiles (comma-separated)"
         required
       />
       <button type="submit">Submit</button>
